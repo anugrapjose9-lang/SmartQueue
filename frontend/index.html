@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartQueue – Customer Portal</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+    <div class="container">
+        <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="index.html">
+            <i class="bi bi-layers-fill text-primary"></i> SmartQueue
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav align-items-center gap-3">
+                <li class="nav-item"><span class="nav-link active">Customer Portal</span></li>
+                <li class="nav-item">
+                    <button id="logoutBtn" class="btn btn-outline-light btn-sm">Logout</button>
+                </li>
+                <li class="nav-item">
+                    <a href="#book-ticket" class="btn btn-primary btn-sm px-3 text-white fw-semibold">
+                        Get Ticket
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<header class="hero-section py-5 text-white position-relative overflow-hidden">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-7 text-center text-lg-start">
+                <span class="badge bg-primary bg-opacity-25 text-primary-emphasis border border-primary-subtle px-3 py-2 rounded-pill mb-3 fw-medium">
+                    ✨ Next-Generation Queue Management
+                </span>
+
+                <h1 class="display-4 fw-bold mb-3 tracking-tight">
+                    Don't wait in line.<br>Know your time.
+                </h1>
+
+                <p class="lead text-secondary mb-4">
+                    Get a digital queue ticket, track your position, and receive smart alerts
+                    when your turn is approaching.
+                </p>
+
+                <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
+                    <a href="#book-ticket" class="btn btn-primary btn-lg px-4 shadow-sm">
+                        Get a Queue Ticket
+                    </a>
+                    <a href="#live-queue" class="btn btn-outline-light btn-lg px-4">
+                        View Live Queue
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-5 mt-5 mt-lg-0">
+                <div class="card border-0 shadow-lg p-4 bg-white text-dark rounded-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-uppercase small text-muted fw-bold">Ticket Preview</span>
+                        <span class="badge bg-warning text-dark px-2 py-1">WAITING</span>
+                    </div>
+
+                    <h2 class="display-5 fw-bold text-primary mb-1">Q-024</h2>
+                    <p class="text-muted small mb-3">Sample ticket • General Service</p>
+
+                    <div class="row g-2 text-center mb-3">
+                        <div class="col-6 bg-light p-2 rounded-3">
+                            <span class="d-block text-muted small">Position</span>
+                            <strong class="fs-5">3</strong>
+                        </div>
+                        <div class="col-6 bg-light p-2 rounded-3">
+                            <span class="d-block text-muted small">Est. Wait</span>
+                            <strong class="fs-5">18 min</strong>
+                        </div>
+                    </div>
+
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-primary" style="width: 65%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container my-5">
+
+    <div id="toastContainer"
+         class="toast-container position-fixed bottom-0 end-0 p-3"
+         style="z-index:1080;"></div>
+
+    <!-- Ticket tracker -->
+    <section id="ticketTrackerSection" class="row mb-5 d-none">
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="card-header bg-primary text-white p-4 d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0 fw-bold">
+                        <i class="bi bi-ticket-perforated me-2"></i>Your Digital Ticket
+                    </h4>
+                    <button id="cancelTicketBtn" class="btn btn-sm btn-outline-light">Dismiss</button>
+                </div>
+
+                <div class="card-body p-4 p-md-5">
+                    <div class="row align-items-center">
+                        <div class="col-md-5 text-center text-md-start">
+                            <span class="text-uppercase small text-muted fw-semibold">Ticket Number</span>
+                            <h1 id="trackerTicketNumber" class="display-3 fw-bold text-primary mb-2">Q-000</h1>
+                            <div id="trackerStatusBadge" class="badge bg-warning text-dark fs-6 px-3 py-2 mb-3">
+                                WAITING
+                            </div>
+                            <p class="text-muted mb-1">
+                                <i class="bi bi-person me-1"></i>
+                                <span id="trackerCustomerName">-</span>
+                            </p>
+                            <p class="text-muted mb-0">
+                                <i class="bi bi-briefcase me-1"></i>
+                                <span id="trackerServiceType">-</span>
+                            </p>
+                        </div>
+
+                        <div class="col-md-7 mt-4 mt-md-0 ps-md-4">
+                            <div class="row g-3 mb-4">
+                                <div class="col-6 bg-light p-3 rounded-3 text-center">
+                                    <span class="d-block text-muted small">Queue Position</span>
+                                    <h3 id="trackerPosition" class="fw-bold text-dark mb-0">-</h3>
+                                </div>
+                                <div class="col-6 bg-light p-3 rounded-3 text-center">
+                                    <span class="d-block text-muted small">Estimated Wait</span>
+                                    <h3 id="trackerWaitTime" class="fw-bold text-dark mb-0">- min</h3>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between small text-muted mb-1">
+                                    <span>Expected Service Around</span>
+                                    <strong id="trackerExpectedTime" class="text-dark">-</strong>
+                                </div>
+                                <div class="progress" style="height:10px;">
+                                    <div id="trackerProgressBar"
+                                         class="progress-bar progress-bar-striped progress-bar-animated bg-primary"
+                                         role="progressbar" style="width:100%"></div>
+                                </div>
+                            </div>
+
+                            <div id="smartAlertBanner"
+                                 class="alert alert-info border-0 shadow-sm mt-3 mb-0 d-flex align-items-center gap-3">
+                                <i class="bi bi-bell-fill fs-4 text-primary"></i>
+                                <div id="smartAlertText" class="small mb-0">
+                                    Connecting to queue intelligence...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Create ticket -->
+    <section id="book-ticket" class="row mb-5 justify-content-center">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <h3 class="fw-bold text-dark">Request Queue Ticket</h3>
+                    <p class="text-muted small">
+                        Fill in your details to secure your place in the digital queue.
+                    </p>
+                </div>
+
+                <form id="ticketForm">
+                    <div class="mb-3">
+                        <label for="customerName" class="form-label fw-medium">Full Name</label>
+                        <input type="text" class="form-control form-control-lg"
+                               id="customerName" placeholder="Your account name" readonly required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="serviceType" class="form-label fw-medium">Service Type</label>
+                        <select class="form-select form-select-lg" id="serviceType" required>
+                            <option value="" selected disabled>Select service...</option>
+                            <option value="General">General Inquiry</option>
+                            <option value="Billing">Billing &amp; Payments</option>
+                            <option value="Technical Support">Technical Support</option>
+                            <option value="Consultation">Consultation</option>
+                        </select>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="priority" class="form-label fw-medium">Priority Level</label>
+                            <select class="form-select form-select-lg" id="priority" required>
+                                <option value="NORMAL" selected>Normal</option>
+                                <option value="HIGH">High (Urgent)</option>
+                                <option value="LOW">Low</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="estimatedServiceTime" class="form-label fw-medium">
+                                Est. Duration (min)
+                            </label>
+                            <input type="number" class="form-control form-control-lg"
+                                   id="estimatedServiceTime" value="10" min="1" max="120" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="submitTicketBtn"
+                            class="btn btn-primary btn-lg w-100 py-3 fw-semibold shadow-sm mt-2">
+                        Generate Digital Ticket
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live queue -->
+    <section id="live-queue" class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+                <div>
+                    <h3 class="fw-bold text-dark mb-1">Live Queue Status</h3>
+                    <p class="text-muted small mb-0">Automatically updates every 10 seconds.</p>
+                </div>
+                <button id="refreshQueueBtn" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-arrow-repeat me-1"></i>Refresh Now
+                </button>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light text-uppercase fs-7 text-muted">
+                            <tr>
+                                <th class="ps-4">Position</th>
+                                <th>Ticket</th>
+                                <th>Customer</th>
+                                <th>Service</th>
+                                <th>Priority</th>
+                                <th>Est. Wait</th>
+                                <th class="pe-4 text-end">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="liveQueueTableBody">
+                            <tr>
+                                <td colspan="7" class="text-center py-4 text-muted">
+                                    Loading live queue...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="bg-dark text-white py-4 mt-5">
+    <div class="container text-center text-md-start d-md-flex justify-content-between align-items-center">
+        <p class="mb-2 mb-md-0 small text-secondary">
+            &copy; 2026 SmartQueue Systems. Enterprise Queue Intelligence.
+        </p>
+        <div class="small text-secondary">Customer Portal</div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

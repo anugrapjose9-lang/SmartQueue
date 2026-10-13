@@ -1,0 +1,15 @@
+target/
+.classpath
+.project
+.settings/
+.idea/
+.vscode/
+*.log
+
+# Secrets and local configuration
+.env
+application-local.properties
+
+# Frontend dependencies and build output
+node_modules/
+dist/

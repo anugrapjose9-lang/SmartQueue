@@ -1,0 +1,59 @@
+:root {
+    --bs-primary: #2563EB;
+    --bs-primary-rgb: 37, 99, 235;
+    --bs-body-bg: #F8FAFC;
+    --bs-body-color: #0F172A;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+}
+
+.tracking-tight {
+    letter-spacing: -0.025em;
+}
+
+.tracking-wider {
+    letter-spacing: 0.05em;
+}
+
+.fs-7 {
+    font-size: 0.75rem;
+}
+
+/* Hero Gradient */
+.hero-section {
+    background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+}
+
+/* Card Enhancements */
+.card {
+    border-radius: 1rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Table Enhancements */
+.table th {
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+.table td {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+/* Responsive border helper */
+@media (min-width: 768px) {
+    .border-end-md {
+        border-right: 1px solid #E2E8F0;
+    }
+}
+
+/* Toast container positioning */
+.toast-container {
+    z-index: 1090;
+}

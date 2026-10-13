@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartQueue – Staff Dashboard</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+    <div class="container">
+        <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#">
+            <i class="bi bi-layers-fill text-primary"></i>
+            SmartQueue
+            <span class="badge bg-primary fs-7 ms-2">Staff Portal</span>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav align-items-center gap-3">
+                <li class="nav-item"><span class="nav-link active">Staff Dashboard</span></li>
+                <li class="nav-item">
+                    <button id="logoutBtn" class="btn btn-outline-light btn-sm">Logout</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<main class="container my-5">
+
+    <div id="toastContainer"
+         class="toast-container position-fixed bottom-0 end-0 p-3"
+         style="z-index:1080;"></div>
+
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+            <h2 class="fw-bold text-dark mb-1">Queue Operations Dashboard</h2>
+            <p class="text-muted small mb-0">
+                Manage customer tickets, serve the next ticket, and complete services.
+            </p>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button id="serveNextBtn" class="btn btn-success fw-semibold shadow-sm px-4">
+                <i class="bi bi-megaphone-fill me-2"></i>Serve Next Ticket
+            </button>
+            <button id="refreshStaffBtn" class="btn btn-outline-secondary" title="Refresh dashboard">
+                <i class="bi bi-arrow-repeat"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Dashboard summary -->
+    <div class="row g-4 mb-5">
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm p-4 bg-white rounded-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-uppercase small text-muted fw-semibold">Total Tickets</span>
+                        <h2 id="statTotal" class="display-6 fw-bold text-dark mt-1 mb-0">0</h2>
+                    </div>
+                    <div class="bg-primary bg-opacity-15 p-3 rounded-4 text-primary">
+                        <i class="bi bi-ticket-detailed fs-3"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm p-4 bg-white rounded-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-uppercase small text-muted fw-semibold">Waiting</span>
+                        <h2 id="statWaiting" class="display-6 fw-bold text-warning mt-1 mb-0">0</h2>
+                    </div>
+                    <div class="bg-warning bg-opacity-15 p-3 rounded-4 text-warning">
+                        <i class="bi bi-hourglass-split fs-3"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm p-4 bg-white rounded-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-uppercase small text-muted fw-semibold">Currently Serving</span>
+                        <h2 id="statServing" class="display-6 fw-bold text-success mt-1 mb-0">0</h2>
+                    </div>
+                    <div class="bg-success bg-opacity-15 p-3 rounded-4 text-success">
+                        <i class="bi bi-person-check-fill fs-3"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm p-4 bg-white rounded-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-uppercase small text-muted fw-semibold">Completed</span>
+                        <h2 id="statCompleted" class="display-6 fw-bold text-secondary mt-1 mb-0">0</h2>
+                    </div>
+                    <div class="bg-secondary bg-opacity-15 p-3 rounded-4 text-secondary">
+                        <i class="bi bi-check-all fs-3"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ticket table -->
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="card-header bg-white py-3 px-4 border-bottom">
+            <h5 class="fw-bold mb-0 text-dark">
+                <i class="bi bi-list-columns-reverse me-2"></i>Active Service Queue
+            </h5>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light text-uppercase fs-7 text-muted">
+                    <tr>
+                        <th class="ps-4">Ticket</th>
+                        <th>Customer</th>
+                        <th>Service</th>
+                        <th>Priority</th>
+                        <th>Arrival Time</th>
+                        <th>Status</th>
+                        <th class="pe-4 text-end">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="staffQueueTableBody">
+                    <tr>
+                        <td colspan="7" class="text-center py-4 text-muted">
+                            Loading queue data...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="staff.js"></script>
+</body>
+</html>
